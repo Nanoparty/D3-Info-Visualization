@@ -1,0 +1,71 @@
+* {
+  font-family: Arial, Geneva, Helvetica, sans-serif;
+}
+
+.selection {
+  /* add a solid border to the brush */
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+#main {
+  display: flex;
+}
+
+.label {
+  fill: black;
+  font-size: 12px;
+}
+
+.dot--hovered,
+.dot--selected.dot--hovered {
+  /* 
+    The definition here means that the styles defined below apply
+    (1) If an element has "dot--hovered",
+    OR
+    (2) If an element has both "dot--selected" and "dot--hovered" classes
+    
+    Because of (2), the styles here will take precedence and overwrite the styles
+    define for the ".dot--selected" class alone. This means that hovering effect
+    takes precedence over brush selection. If a dot is both hovered and inside the brush,
+    it will be styled as if it is hovered.
+  */
+  fill: rgba(255, 255, 0, 0.5)
+}
+
+.dot--selected {
+  fill: rgba(255, 0, 0, 0.3);
+}
+
+
+.title {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px;
+  margin: 1px 0;
+  border-radius: 10px;
+}
+
+.title--hovered,
+.title--selected.title--hovered {
+  background-color: rgba(255, 255, 0, 0.5);
+  /* font-size: 24px; */
+  font-weight: bold;
+}
+
+.title--selected {
+  background-color: rgba(255, 0, 0, 0.2);
+  /* font-size: 24px; */
+  font-weight: bold;
+}
+
+
+.info {
+  font-size: 9px;
+  font-weight: normal;
+  display: none;
+}
+
+.title--hovered > .info,
+.title--selected > .info {
+  display: inherit;
+}
