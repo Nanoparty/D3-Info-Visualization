@@ -116,20 +116,26 @@ d3.csv("movies.csv", function(csv) {
             .attr('type','text')
             .attr('name','weight'+numAtts)
             .attr('class','input'+numAtts)
+            .attr('id',function(d,i){return 'weight-' + i;})
             .attr('value','1')
-            .on('change',function(){
+            .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
                 console.log(selectValue)
-                if(selectValue = null)
-                    d3.select(this).property('value') = 1;
+                selectValue2 = d3.select('#select-' + i).property('value')
+                console.log(selectValue2)
+                
+                
             });
 
             var select = d3.select('#chart1')
             .append('select')
             .attr('class','select' + numAtts)
-            .on('change',function(){
+            .attr('id',function(d,i){return 'select-' + i;})
+            .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
                 console.log(selectValue)
+                selectValue2 = d3.select('#weight-' + i).property('value')
+                console.log(selectValue2)
             });
 
             var options = select
