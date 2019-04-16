@@ -18,11 +18,11 @@ d3.csv("movies.csv", function(csv) {
 	        	|| d.imdb_score==="null" || d.imdb_score==='' ) {
 	            return false;
 	        }
-	        d.title_year = parseInt(d.title_year, 10);
-	        d.budget = parseInt(d.budget, 10);
-	        d.gross = parseInt(d.gross, 10);
-	        d.duration = parseInt(d.duration, 10);
-	        d.imdb_score = parseInt(d.imdb_score, 10);
+	        d.title_year = +d.title_year;
+	        d.budget = +d.budget;
+	        d.gross = +d.gross;
+	        d.duration = +d.duration;
+	        d.imdb_score = +d.imdb_score;
             d.height = null;
 
 	        return true;
@@ -185,7 +185,8 @@ d3.csv("movies.csv", function(csv) {
 	   		d3.select('#act').text(d.ACT);
 	   		d3.select('#gpa').text(d.GPA);
         }); */
-        
+    var formatComma = d3.format(","),
+    	formatDecimal = d3.format(".1f");
     
     var temp2= chart2G.selectAll(".dot")
 		.data(csv)
@@ -209,10 +210,10 @@ d3.csv("movies.csv", function(csv) {
 	    		});
 	   		d3.select('#movie').text(d.movie_title);
 	   		d3.select('#director').text(d.director_name);
-	   		d3.select('#gross_revenue').text(d.gross);
-	   		d3.select('#imdb_score').text(d.imdb_score);
-	   		d3.select('#genre').text(d.genre);
-	   		d3.select('#duration').text(d.duration);
+	   		d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
+	   		d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
+	   		d3.select('#genre').text(d.genres);
+	   		d3.select('#duration').text(d.duration + " min");
 	   		d3.select('#year').text(d.title_year);
         });
 
