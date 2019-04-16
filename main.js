@@ -1,4 +1,4 @@
-var width =500;
+var width =1000;
 var height= 500;
 
 
@@ -23,16 +23,19 @@ d3.csv("movies.csv", function(csv) {
 	        d.gross = parseInt(d.gross, 10);
 	        d.duration = parseInt(d.duration, 10);
 	        d.imdb_score = parseInt(d.imdb_score, 10);
+            d.height = null;
 
 	        return true;
     	});
-	// for (var i=0; i<csv.length; ++i) {
-	// 	csv[i].imdb_score = Number(csv[i].imdb_score);
-	// 	csv[i].title_year = Number(csv[i].title_year);
-	// 	csv[i].budget = Number(csv[i].budget);
-	// 	csv[i].gross = Number(csv[i].gross);
-	// 	csv[i].duration = Number(csv[i].duration);
- //    }
+     var i_height = null;
+	 for (var i=0; i<csv.length; ++i) {
+         csv[i].height = Math.random();
+	 	//csv[i].imdb_score = Number(csv[i].imdb_score);
+	 	//csv[i].title_year = Number(csv[i].title_year);
+	 	//csv[i].budget = Number(csv[i].budget);
+	 	//csv[i].gross = Number(csv[i].gross);
+	 	//csv[i].duration = Number(csv[i].duration);
+     }
     var imdb_score_max = d3.max(csv, function(d) { return d.imdb_score; });
     console.log("imdb_score_max: " + imdb_score_max);
     var imdb_score_min = d3.min(csv, function(d) { return d.imdb_score; });
@@ -81,7 +84,7 @@ d3.csv("movies.csv", function(csv) {
 
 
     // Axis setup
-    var xScale = d3.scaleLinear().domain(duration_Extent).range([50, 470]);
+    var xScale = d3.scaleLinear().domain(duration_Extent).range([50, 800]);
     var yScale = d3.scaleLinear().domain([0, 1]).range([470, 30]);
 
     // var xScale2 = d3.scaleLinear().domain(actExtent).range([50, 470]);
@@ -199,7 +202,7 @@ d3.csv("movies.csv", function(csv) {
 		.attr("id",function(d,i) {return i;} )
 		.attr("stroke", "black")
 		.attr("cx", function(d) { return xScale(d['duration']); })
-		.attr("cy", height - 30.0-100*Math.random())
+		.attr("cy", height - 30.0-100)
 		.attr("r", 5)
 		.on("click", function(d,i)
 		{
@@ -251,17 +254,37 @@ d3.csv("movies.csv", function(csv) {
 
     chart2G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
-		.attr("transform", "translate(0,"+ (width -30)+ ")")
+		.attr("transform", "translate(0,"+ (450)+ ")")
 		.call(xAxis)
 		.append("text")
 		.attr("class", "label")
-		.attr("x", width-16)
+		.attr("x", width-200)
 		.attr("y", -6)
 		.style("text-anchor", "end")
-		.text("ACT")
+		.text("High Favorability")
 		.style("fill", "black");
-
+        
     chart2G // or something else that selects the SVG element in your visualizations
+		.append("g") // create a group node
+		.attr("transform", "translate(0,"+ (450)+ ")")
+		.call(xAxis)
+		.append("text")
+		.attr("class", "label")
+		.attr("x", 150)
+		.attr("y", -6)
+		.style("text-anchor", "end")
+		.text("Low Favorability")
+		.style("fill", "black");
+        
+    chart2G.append("text")
+        .attr("x", (400))             
+        .attr("y", (100))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Movie Favorability Graph");
+
+     /* chart2G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
 		.attr("transform", "translate(50, 0)")
 		.call(yAxis)
@@ -272,5 +295,5 @@ d3.csv("movies.csv", function(csv) {
 		.attr("dy", ".71em")
 		.style("text-anchor", "end")
 		.text("GPA")
-		.style("fill", "black");
-	});
+		.style("fill", "black"); */
+	}); 
