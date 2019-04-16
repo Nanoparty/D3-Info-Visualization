@@ -94,11 +94,59 @@ d3.csv("movies.csv", function(csv) {
     // var yAxis2 = d3.axisLeft().scale(yScale2);
 
     //Create SVGs and <g> elements as containers for charts
-    // var chart1G = d3.select("#chart1")
-	   //              .append("svg:svg")
-	   //              .attr("width",width)
-	   //              .attr("height",height)
-    //                 .append('g');
+    chart1G = d3.select("#chart1")
+        .append('p')
+        .append('button')
+            .style("border", "1px solid black")
+        .text('Add Attribute')
+        .on('click', function() {
+            if(numAtts < 5){
+                numAtts++;
+                addAttributes();
+            }
+        });
+    
+    var numAtts = 1;
+    addAttributes();
+    
+    function addAttributes(){
+        chart1G.selectAll("select").remove()
+        var data = ["Duration", "IMDB Score", "Year","Gross Revenue","Budget"];
+    
+            d3.select('#chart1')
+            .append('input')
+            .attr('type','text')
+            .attr('name','weight'+numAtts)
+            .attr('value','1')
+        
+            var select = d3.select('#chart1')
+            .append('select')
+            .attr('class','select' + numAtts)
+            .on('change',onchange)
+            
+            var options = select
+            .selectAll('option')
+            .data(data).enter()
+            .append('option')
+                .text(function (d) { return d; });
+            
+        
+        
+        for(var i = 0;i < numAtts;i++){
+           function onchange() {
+            selectValue = d3.select('select'+numAtts).property('value')
+            d3.select('chart1')
+                .append('p')
+                .text(selectValue + ' is the last selected option.')
+            };        
+            
+        }
+            
+    }
+    
+    
+
+     
 
 
     var chart2G = d3.select("#chart2")
@@ -141,7 +189,8 @@ d3.csv("movies.csv", function(csv) {
 	   		d3.select('#act').text(d.ACT);
 	   		d3.select('#gpa').text(d.GPA);
         }); */
-
+        
+    
     var temp2= chart2G.selectAll(".dot")
 		.data(csv)
 		.enter()
@@ -150,7 +199,7 @@ d3.csv("movies.csv", function(csv) {
 		.attr("id",function(d,i) {return i;} )
 		.attr("stroke", "black")
 		.attr("cx", function(d) { return xScale(d['duration']); })
-		.attr("cy", height - 30.0)
+		.attr("cy", height - 30.0-100*Math.random())
 		.attr("r", 5)
 		.on("click", function(d,i)
 		{
