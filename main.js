@@ -3,23 +3,47 @@ var height= 500;
 
 
 
-d3.csv("movies5.csv", function(csv) {
-    for (var i=0; i<csv.length; ++i) {
-		csv[i].GPA = Number(csv[i].GPA);
-		csv[i].SATM = Number(csv[i].SATM);
-		csv[i].SATV = Number(csv[i].SATV);
-		csv[i].ACT = Number(csv[i].ACT);
+d3.csv("movies.csv", function(csv) {
+   for (var i=0; i<csv.length; ++i) {
+		csv[i].imdb_score = Number(csv[i].imdb_score);
+		csv[i].title_year = (Number(csv[i].title_year);
+		csv[i].budget = Number(csv[i].budget);
+		csv[i].gross = Number(csv[i].gross);
+		csv[i].duration = Number(csv[i].duration);
     }
-    var satmExtent = d3.extent(csv, function(row) { return row.SATM; });
-    var satvExtent = d3.extent(csv, function(row) { return row.SATV; });
-    var actExtent = d3.extent(csv,  function(row) { return row.ACT;  });
-    var gpaExtent = d3.extent(csv,  function(row) {return row.GPA;   });    
+    var imdb_score_max = d3.max(data, function(d) { return d.imdb_score; });
+    var imdb_score_min = d3.min(data, function(d) { return d.imdb_score; });
 
-    
+    var title_year_max = d3.max(data, function(d) { return d.title_year; });
+    var title_year_min = d3.min(data, function(d) { return d.title_year; });
+
+    var budget_max = d3.max(data, function(d) { return d.budget; });
+    var budget_min = d3.min(data, function(d) { return d.budget; });
+
+    var gross_max = d3.max(data, function(d) { return d.gross; });
+    var gross_min = d3.min(data, function(d) { return d.gross; });
+
+    var duration_max = d3.max(data, function(d) { return d.duration; });
+    var duration_min = d3.min(data, function(d) { return d.duration; });
+
+    var csv_norm = csv;
+    for (var i=0; i<csv.length; ++i) {
+		csv_norm[i].imdb_score = (csv[i].imdb_score - imdb_score_min)/(imdb_score_max - imdb_score_min);
+		csv_norm[i].title_year = (csv[i].title_year - title_year_min)/(title_year_max - title_year_min);
+		csv_norm[i].budget = (csv[i].budget - budget_min)/(budget_max - budget_min);
+		csv_norm[i].gross = (csv[i].gross - gross_min)/(gross_max - gross_min);
+		csv_norm[i].duration = (csv[i].duration - duration_min)/(imdb_score_max - imdb_score_min);
+    }
+    // var satmExtent = d3.extent(csv, function(row) { return row.SATM; });
+    // var satvExtent = d3.extent(csv, function(row) { return row.SATV; });
+    // var actExtent = d3.extent(csv,  function(row) { return row.ACT;  });
+    // var gpaExtent = d3.extent(csv,  function(row) {return row.GPA;   });
+
+
    /*  var satExtents = {
 	"SATM": satmExtent,
 	"SATV": satvExtent
-    }; 
+    };
     var actExtents = {
     "ACT": actExtent,
 	"GPA": gpaExtent
@@ -29,13 +53,13 @@ d3.csv("movies5.csv", function(csv) {
     // Axis setup
     var xScale = d3.scaleLinear().domain(satmExtent).range([50, 470]);
     var yScale = d3.scaleLinear().domain(satvExtent).range([470, 30]);
- 
+
     var xScale2 = d3.scaleLinear().domain(actExtent).range([50, 470]);
     var yScale2 = d3.scaleLinear().domain(gpaExtent).range([470, 30]);
-     
+
     var xAxis = d3.axisBottom().scale(xScale);
     var yAxis = d3.axisLeft().scale(yScale);
-  
+
     var xAxis2 = d3.axisBottom().scale(xScale2);
     var yAxis2 = d3.axisLeft().scale(yScale2);
 
@@ -55,8 +79,8 @@ d3.csv("movies5.csv", function(csv) {
 
 
 	 /******************************************/
-		
-	
+
+
 
 	/******************************************/
 
@@ -72,7 +96,7 @@ d3.csv("movies5.csv", function(csv) {
 	    .attr("cy", function(d) { return yScale(d['SATV']); })
 	    .attr("r", 5)
 	    .on("click", function(d,i)
-	    { 
+	    {
 	    	brush2.move(brushContainerG2, null);
 	    	d3.selectAll('.dot1')
 		   		.classed('dot--slected1', false);
@@ -99,8 +123,8 @@ d3.csv("movies5.csv", function(csv) {
 		.attr("cy", function(d) { return yScale2(d['GPA']); })
 		.attr("r", 5)
 		.on("click", function(d,i)
-		{	
-			
+		{
+
 
 			d3.selectAll('.dot2')
 		   		.classed('dot--selected2', false);
@@ -115,7 +139,7 @@ d3.csv("movies5.csv", function(csv) {
 	   		d3.select('#act').text(d.ACT);
 	   		d3.select('#gpa').text(d.GPA);
         });
-    
+
 
 
     chart1G // or something else that selects the SVG element in your visualizations
