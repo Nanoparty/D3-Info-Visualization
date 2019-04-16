@@ -96,6 +96,7 @@ d3.csv("movies.csv", function(csv) {
             .style("border", "1px solid black")
         .text('Add Attribute')
         .on('click', function() {
+            
             if(numAtts < 5){
                 numAtts++;
                 addAttributes();
@@ -107,18 +108,29 @@ d3.csv("movies.csv", function(csv) {
     
     function addAttributes(){
         chart1G.selectAll("select").remove()
+        
         var data = ["Duration", "IMDB Score", "Year","Gross Revenue","Budget"];
     
             d3.select('#chart1')
             .append('input')
             .attr('type','text')
             .attr('name','weight'+numAtts)
+            .attr('class','input'+numAtts)
             .attr('value','1')
+            .on('change',function(){
+                selectValue = d3.select(this).property('value')
+                console.log(selectValue)
+                if(selectValue = null)
+                    d3.select(this).property('value') = 1;
+            });
         
             var select = d3.select('#chart1')
             .append('select')
             .attr('class','select' + numAtts)
-            .on('change',onchange)
+            .on('change',function(){
+                selectValue = d3.select(this).property('value')
+                console.log(selectValue)
+            });
             
             var options = select
             .selectAll('option')
@@ -129,11 +141,10 @@ d3.csv("movies.csv", function(csv) {
         
         
         for(var i = 0;i < numAtts;i++){
+            console.log("set listener");
            function onchange() {
             selectValue = d3.select('select'+numAtts).property('value')
-            d3.select('chart1')
-                .append('p')
-                .text(selectValue + ' is the last selected option.')
+            console.log(selectValue+"value")
             };        
             
         }
