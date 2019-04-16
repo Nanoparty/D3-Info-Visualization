@@ -128,8 +128,22 @@ d3.csv("movies.csv", function(csv) {
             .append('select')
             .attr('class','select' + numAtts)
             .on('change',function(){
-                selectValue = d3.select(this).property('value')
-                console.log(selectValue)
+                selectValue = d3.select(this).property('value');
+                console.log(selectValue);
+                //change dropdown
+            	if (selectValue === parameters[0].id) {
+            		function_list.push(parameters[0]);
+            	} else if (selectValue === parameters[1].id) {
+            		function_list.push(parameters[1]);
+            	} else if (selectValue === parameters[2].id) {
+            		function_list.push(parameters[2]);
+            	} else if (selectValue === parameters[3].id) {
+            		function_list.push(parameters[3]);
+            	} else {
+            		function_list.push(parameters[4]);
+            	}
+	            console.log(function_list);
+
             });
 
             var options = select
