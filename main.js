@@ -34,6 +34,8 @@ d3.csv("movies.csv", function(csv) {
 		csv_norm[i].gross = (csv[i].gross - gross_min)/(gross_max - gross_min);
 		csv_norm[i].duration = (csv[i].duration - duration_min)/(imdb_score_max - imdb_score_min);
     }
+
+
     // var satmExtent = d3.extent(csv, function(row) { return row.SATM; });
     // var satvExtent = d3.extent(csv, function(row) { return row.SATV; });
     // var actExtent = d3.extent(csv,  function(row) { return row.ACT;  });
@@ -51,24 +53,24 @@ d3.csv("movies.csv", function(csv) {
 
 
     // Axis setup
-    var xScale = d3.scaleLinear().domain(satmExtent).range([50, 470]);
-    var yScale = d3.scaleLinear().domain(satvExtent).range([470, 30]);
+    var xScale = d3.scaleLinear().domain([0, 1]).range([50, 470]);
+    var yScale = d3.scaleLinear().domain([0, 1]).range([470, 30]);
 
-    var xScale2 = d3.scaleLinear().domain(actExtent).range([50, 470]);
-    var yScale2 = d3.scaleLinear().domain(gpaExtent).range([470, 30]);
+    // var xScale2 = d3.scaleLinear().domain(actExtent).range([50, 470]);
+    // var yScale2 = d3.scaleLinear().domain(gpaExtent).range([470, 30]);
 
     var xAxis = d3.axisBottom().scale(xScale);
     var yAxis = d3.axisLeft().scale(yScale);
 
-    var xAxis2 = d3.axisBottom().scale(xScale2);
-    var yAxis2 = d3.axisLeft().scale(yScale2);
+    // var xAxis2 = d3.axisBottom().scale(xScale2);
+    // var yAxis2 = d3.axisLeft().scale(yScale2);
 
     //Create SVGs and <g> elements as containers for charts
-    var chart1G = d3.select("#chart1")
-	                .append("svg:svg")
-	                .attr("width",width)
-	                .attr("height",height)
-                    .append('g');
+    // var chart1G = d3.select("#chart1")
+	   //              .append("svg:svg")
+	   //              .attr("width",width)
+	   //              .attr("height",height)
+    //                 .append('g');
 
 
     var chart2G = d3.select("#chart2")
@@ -119,58 +121,58 @@ d3.csv("movies.csv", function(csv) {
 		.classed('dot2', true) // Always remember to add the class you select the elements with
 		.attr("id",function(d,i) {return i;} )
 		.attr("stroke", "black")
-		.attr("cx", function(d) { return xScale2(d['ACT']); })
-		.attr("cy", function(d) { return yScale2(d['GPA']); })
+		.attr("cx", function(d) { return xScale(d['duration']); })
+		.attr("cy", 0)
 		.attr("r", 5)
 		.on("click", function(d,i)
 		{
 
 
-			d3.selectAll('.dot2')
-		   		.classed('dot--selected2', false);
-		   	d3.select(this)
-		   		.classed('dot--selected2', true);
-	   		d3.selectAll('.dot1')
-		   		.classed('dot--selected1', function(e) {
-		      		return e==d;
-	    		});
-	   		d3.select('#satm').text(d.SATM);
-	   		d3.select('#satv').text(d.SATV);
-	   		d3.select('#act').text(d.ACT);
-	   		d3.select('#gpa').text(d.GPA);
+			// d3.selectAll('.dot2')
+		 //   		.classed('dot--selected2', false);
+		 //   	d3.select(this)
+		 //   		.classed('dot--selected2', true);
+	  //  		d3.selectAll('.dot1')
+		 //   		.classed('dot--selected1', function(e) {
+		 //      		return e==d;
+	  //   		});
+	  //  		d3.select('#satm').text(d.SATM);
+	  //  		d3.select('#satv').text(d.SATV);
+	  //  		d3.select('#act').text(d.ACT);
+	  //  		d3.select('#gpa').text(d.GPA);
         });
 
 
 
-    chart1G // or something else that selects the SVG element in your visualizations
-		.append("g") // create a group node
-		.attr("transform", "translate(0,"+ (width -30)+ ")")
-		.call(xAxis) // call the axis generator
-		.append("text")
-		.attr("class", "label")
-		.attr("x", width-16)
-		.attr("y", -6)
-		.style("text-anchor", "end")
-		.text("SATM")
-		.style("fill", "black");
+  //   chart1G // or something else that selects the SVG element in your visualizations
+		// .append("g") // create a group node
+		// .attr("transform", "translate(0,"+ (width -30)+ ")")
+		// .call(xAxis) // call the axis generator
+		// .append("text")
+		// .attr("class", "label")
+		// .attr("x", width-16)
+		// .attr("y", -6)
+		// .style("text-anchor", "end")
+		// .text("SATM")
+		// .style("fill", "black");
 
-    chart1G // or something else that selects the SVG element in your visualizations
-		.append("g") // create a group node
-		.attr("transform", "translate(50, 0)")
-		.call(yAxis)
-		.append("text")
-		.attr("class", "label")
-		.attr("transform", "rotate(-90)")
-		.attr("y", 6)
-		.attr("dy", ".71em")
-		.style("text-anchor", "end")
-		.text("SATV")
-		.style("fill", "black");
+  //   chart1G // or something else that selects the SVG element in your visualizations
+		// .append("g") // create a group node
+		// .attr("transform", "translate(50, 0)")
+		// .call(yAxis)
+		// .append("text")
+		// .attr("class", "label")
+		// .attr("transform", "rotate(-90)")
+		// .attr("y", 6)
+		// .attr("dy", ".71em")
+		// .style("text-anchor", "end")
+		// .text("SATV")
+		// .style("fill", "black");
 
     chart2G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
 		.attr("transform", "translate(0,"+ (width -30)+ ")")
-		.call(xAxis2)
+		.call(xAxis)
 		.append("text")
 		.attr("class", "label")
 		.attr("x", width-16)
@@ -182,7 +184,7 @@ d3.csv("movies.csv", function(csv) {
     chart2G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
 		.attr("transform", "translate(50, 0)")
-		.call(yAxis2)
+		.call(yAxis)
 		.append("text")
 		.attr("class", "label")
 		.attr("transform", "rotate(-90)")
