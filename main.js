@@ -3,7 +3,7 @@ var height= 500;
 
 
 
-d3.csv("movies.csv", function(csv) {
+d3.csv("movies5.csv", function(csv) {
     for (var i=0; i<csv.length; ++i) {
 		csv[i].GPA = Number(csv[i].GPA);
 		csv[i].SATM = Number(csv[i].SATM);
@@ -16,14 +16,14 @@ d3.csv("movies.csv", function(csv) {
     var gpaExtent = d3.extent(csv,  function(row) {return row.GPA;   });    
 
     
-    var satExtents = {
+   /*  var satExtents = {
 	"SATM": satmExtent,
 	"SATV": satvExtent
     }; 
     var actExtents = {
     "ACT": actExtent,
 	"GPA": gpaExtent
-    };
+    }; */
 
 
     // Axis setup
