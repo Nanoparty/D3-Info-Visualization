@@ -5,12 +5,12 @@ var height= 500;
 
 d3.csv("movies.csv", function(csv) {
 	csv = csv.filter(function(d) {
-	        // if (!d.title_year=='' || !d.movie_title=='' || !d.movie_facebook_likes=='' || !d.director_name=='' || !d.director_facebook_likes==''
-	        // 	|| !d.actor_1_name=='' || !d.actor_1_facebook_likes=='' || !d.actor_2_name=='' || !d.actor_2_facebook_likes==''
-	        // 	|| !d.actor_3_name=='' || !d.actor_3_facebook_likes=='' || !d.cast_total_facebook_likes=='' || !d.facenumber_in_poster==''
-	        // 	|| !d.num_critic_for_reviews=='' || !d.num_user_for_reviews=='' || !d.budget=='' || !d.gross=='' || !d.duration==''
-	        // 	|| !d.genres=='' || !d.plot_keywords=='' || !d.imdb_score=='' || !d.movie_imdb_link=='' || !d.language=='' || !d.country==''
-	        // 	|| !d.content_rating=='' || !d.aspect_ratio=='' || !d.color=='') {
+	        // if (d.title_year=='' || d.movie_title=='' || d.movie_facebook_likes=='' || d.director_name=='' || d.director_facebook_likes==''
+	        // 	|| d.actor_1_name=='' || d.actor_1_facebook_likes=='' || d.actor_2_name=='' || d.actor_2_facebook_likes==''
+	        // 	|| d.actor_3_name=='' || d.actor_3_facebook_likes=='' || d.cast_total_facebook_likes=='' || d.facenumber_in_poster==''
+	        // 	|| d.num_critic_for_reviews=='' || d.num_user_for_reviews=='' || d.budget=='' || d.gross=='' || d.duration==''
+	        // 	|| d.genres=='' || d.plot_keywords=='' || d.imdb_score=='' || d.movie_imdb_link=='' || d.language=='' || d.country==''
+	        // 	|| d.content_rating=='' || d.aspect_ratio=='' || d.color=='') {
 	        if (   d.title_year==="null" || d.title_year===''
 	        	|| d.budget==="null" 	 || d.budget==='' 
 	        	|| d.gross==="null" 	 || d.gross===''
@@ -26,13 +26,6 @@ d3.csv("movies.csv", function(csv) {
 
 	        return true;
     	});
-	// for (var i=0; i<csv.length; ++i) {
-	// 	csv[i].imdb_score = Number(csv[i].imdb_score);
-	// 	csv[i].title_year = Number(csv[i].title_year);
-	// 	csv[i].budget = Number(csv[i].budget);
-	// 	csv[i].gross = Number(csv[i].gross);
-	// 	csv[i].duration = Number(csv[i].duration);
- //    }
     var imdb_score_max = d3.max(csv, function(d) { return d.imdb_score; });
     console.log("imdb_score_max: " + imdb_score_max);
     var imdb_score_min = d3.min(csv, function(d) { return d.imdb_score; });
@@ -63,21 +56,22 @@ d3.csv("movies.csv", function(csv) {
     // var duration_min = d3.min(csv, function(d) { return d.duration || Infinity; });
     console.log("duration_min: "  + duration_min);
     
-    var csv_norm = csv;
-    for (var i=0; i<csv.length; ++i) {
-		csv_norm[i].imdb_score = (csv[i].imdb_score - imdb_score_min)/(imdb_score_max - imdb_score_min);
-		csv_norm[i].title_year = (csv[i].title_year - title_year_min)/(title_year_max - title_year_min);
-		csv_norm[i].budget = (csv[i].budget - budget_min)/(budget_max - budget_min);
-		csv_norm[i].gross = (csv[i].gross - gross_min)/(gross_max - gross_min);
-		csv_norm[i].duration = (csv[i].duration - duration_min)/(imdb_score_max - imdb_score_min);
-    }
+  //   var csv_norm = csv;
+  //   for (var i=0; i<csv.length; ++i) {
+		// csv_norm[i].imdb_score = (csv[i].imdb_score - imdb_score_min)/(imdb_score_max - imdb_score_min);
+		// csv_norm[i].title_year = (csv[i].title_year - title_year_min)/(title_year_max - title_year_min);
+		// csv_norm[i].budget = (csv[i].budget - budget_min)/(budget_max - budget_min);
+		// csv_norm[i].gross = (csv[i].gross - gross_min)/(gross_max - gross_min);
+		// csv_norm[i].duration = (csv[i].duration - duration_min)/(imdb_score_max - imdb_score_min);
+  //   }
 
 
-    var imdb_score_Extent = d3.extent(csv, function(row) { return row.imdb_score; });
-    var title_year_Extent = d3.extent(csv, function(row) { return row.title_year; });
-    var budget_Extent = d3.extent(csv,  function(row) { return row.budget;  });
-    var gross_Extent = d3.extent(csv,  function(row) {return row.gross;   });
-    var duration_Extent = d3.extent(csv,  function(row) {return row.duration;   });
+    var imdb_score_Extent = d3.extent(csv, function(d) { return d.imdb_score; });
+    var title_year_Extent = d3.extent(csv, function(d) { return d.title_year; });
+    var budget_Extent = d3.extent(csv,  function(d) { return d.budget;  });
+    var gross_Extent = d3.extent(csv,  function(d) {return d.gross;   });
+    var duration_Extent = d3.extent(csv,  function(d) {return d.duration;   });
+    console.log("duration_Extent: " + duration_Extent);
 
 
     // Axis setup
@@ -203,8 +197,6 @@ d3.csv("movies.csv", function(csv) {
 		.attr("r", 5)
 		.on("click", function(d,i)
 		{
-
-
 			d3.selectAll('.dot2')
 		   		.classed('dot--selected2', false);
 		   	d3.select(this)
