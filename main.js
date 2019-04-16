@@ -200,14 +200,14 @@ d3.csv("movies.csv", function(csv) {
 				.attr("r", 5)
 				.on("click", function(d,i)
 				{
-					/* d3.selectAll('.dot2')
-				   		.classed('dot--selected2', false);
+					 d3.selectAll('.dot2')
+				   		.classed('dot--selected', false);
 				   	d3.select(this)
-				   		.classed('dot--selected2', true);
-			   		d3.selectAll('.dot1')
+				   		.classed('dot--selected', true);
+			   		/* d3.selectAll('.dot1')
 				   		.classed('dot--selected1', function(e) {
 				      		return e==d;
-			    		});*/
+			    		}); */
 			   		d3.select('#movie').text(d.movie_title);
 			   		d3.select('#director').text(d.director_name);
 			   		d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
