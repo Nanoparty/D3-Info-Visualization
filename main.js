@@ -116,12 +116,15 @@ d3.csv("movies.csv", function(csv) {
             .attr('type','text')
             .attr('name','weight'+numAtts)
             .attr('class','input'+numAtts)
+            .attr('id',function(d,i){return 'weight-' + i;})
             .attr('value','1')
-            .on('change',function(){
+            .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
                 console.log(selectValue)
-                if(selectValue = null)
-                    d3.select(this).property('value') = 1;
+                selectValue2 = d3.select('#select-' + i).property('value')
+                console.log(selectValue2)
+                
+                
             });
 
             var select = d3.select('#chart1')
@@ -143,7 +146,6 @@ d3.csv("movies.csv", function(csv) {
             		function_list.push(parameters[4]);
             	}
 	            console.log(function_list);
-
             });
 
             var options = select
@@ -201,36 +203,39 @@ d3.csv("movies.csv", function(csv) {
 
     var formatComma = d3.format(","),
     	formatDecimal = d3.format(".1f");
+        
+    createAxis(xScale);
 
-    var temp2 = chart2G.selectAll(".dot")
-				.data(csv)
-				.enter()
-				.append("circle")
-				.classed('dot2', true) // Always remember to add the class you select the elements with
-				.attr("id",function(d,i) {return i;} )
-				.attr("stroke", "black")
-				.attr("cx", function(d) { return xScale((d['duration']-duration_min)/(duration_max-duration_min)); })
-				.attr("cy", height - 30.0-100)
-				.attr("r", 5)
-				.on("click", function(d,i)
-				{
-					/* d3.selectAll('.dot2')
-				   		.classed('dot--selected2', false);
-				   	d3.select(this)
-				   		.classed('dot--selected2', true);
-			   		d3.selectAll('.dot1')
-				   		.classed('dot--selected1', function(e) {
-				      		return e==d;
-			    		});*/
-			   		d3.select('#movie').text(d.movie_title);
-			   		d3.select('#director').text(d.director_name);
-			   		d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
-			   		d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
-			   		d3.select('#genre').text(d.genres);
-			   		d3.select('#duration').text(d.duration + " min");
-			   		d3.select('#year').text(d.title_year);
-		        });
-
+    function createAxis(xScale){
+        var temp2 = chart2G.selectAll(".dot")
+                    .data(csv)
+                    .enter()
+                    .append("circle")
+                    .classed('dot2', true) // Always remember to add the class you select the elements with
+                    .attr("id",function(d,i) {return i;} )
+                    .attr("stroke", "black")
+                    .attr("cx", function(d) { return xScale((d['duration']-duration_min)/(duration_max-duration_min)); })
+                    .attr("cy", height - 30.0-100)
+                    .attr("r", 5)
+                    .on("click", function(d,i)
+                    {
+                         d3.selectAll('.dot2')
+                            .classed('dot--selected', false);
+                        d3.select(this)
+                            .classed('dot--selected', true);
+                        /* d3.selectAll('.dot1')
+                            .classed('dot--selected1', function(e) {
+                                return e==d;
+                            }); */
+                        d3.select('#movie').text(d.movie_title);
+                        d3.select('#director').text(d.director_name);
+                        d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
+                        d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
+                        d3.select('#genre').text(d.genres);
+                        d3.select('#duration').text(d.duration + " min");
+                        d3.select('#year').text(d.title_year);
+                    });
+    }
   	/* chart1G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
 		.attr("transform", "translate(0,"+ (width -30)+ ")")
@@ -255,8 +260,10 @@ d3.csv("movies.csv", function(csv) {
 		.style("text-anchor", "end")
 		.text("SATV")
 		.style("fill", "black"); */
-
-    chart2G.append("g") // create a group node
+    drawAxis();
+        
+    function drawAxis(){
+        chart2G.append("g") // create a group node
 		.attr("transform", "translate(0,"+ (450)+ ")")
 		.call(xAxis)
 		.append("text")
@@ -285,6 +292,10 @@ d3.csv("movies.csv", function(csv) {
         .style("font-size", "16px")
         .style("text-decoration", "underline")
         .text("Movie Favorability Graph");
+        
+    }
+
+    
 
      /* chart2G // or something else that selects the SVG element in your visualizations
 		.append("g") // create a group node
