@@ -52,231 +52,157 @@ d3.csv("movies.csv", function(csv) {
     console.log("duration_max: " + duration_max);
     console.log("duration_min: "  + duration_min);
 
-    var parameters = [{id: "imdb_score", max: imdb_score_max, min: imdb_score_min, weight: 1},
+    var parameters = [{id: "duration", max: duration_max, min: duration_min, weight: 1},
+    				  {id: "imdb_score", max: imdb_score_max, min: imdb_score_min, weight: 1},
     				  {id: "title_year", max: title_year_max, min: title_year_min, weight: 1},
     				  {id: "budget", max: budget_max, min: budget_min, weight: 1},
-    				  {id: "gross", max: gross_max, min: gross_min, weight: 1},
-    				  {id: "duration", max: duration_max, min: duration_min, weight: 1}];
+    				  {id: "gross", max: gross_max, min: gross_min, weight: 1}];
     console.log(parameters);
 
 
-    var imdb_score_Extent = d3.extent(csv, function(d) { return d.imdb_score; });
-    var title_year_Extent = d3.extent(csv, function(d) { return d.title_year; });
-    var budget_Extent = d3.extent(csv,  function(d) { return d.budget;  });
-    var gross_Extent = d3.extent(csv,  function(d) {return d.gross;   });
-    var duration_Extent = d3.extent(csv,  function(d) {return (d.duration-duration_min)/(duration_max-duration_min);   });
-    console.log("duration_Extent: " + duration_Extent);
+    // var imdb_score_Extent = d3.extent(csv, function(d) { return d.imdb_score; });
+    // var title_year_Extent = d3.extent(csv, function(d) { return d.title_year; });
+    // var budget_Extent = d3.extent(csv,  function(d) { return d.budget;  });
+    // var gross_Extent = d3.extent(csv,  function(d) {return d.gross;   });
+    var duration_Extent = d3.extent(csv,  function(d) {return d.duration;   });
+    //console.log(duration_Extent);
+
+    var function_list = [];
 
 
     // Axis setup
-    var xScale = d3.scaleLinear().domain(duration_Extent).range([50, 800]);
+    var xScale = d3.scaleLinear().domain([0, 1]).range([50, 800]);
+    //this xscale is not used bc it is written over in createAxis(), but needs to be here do keep d3 from complaining
     var yScale = d3.scaleLinear().domain([0, 1]).range([470, 30]);
 
+
     var xAxis = d3.axisBottom().scale(xScale);
+    //this xaxis is not used bc it is written over in createAxis(), but needs to be here do keep d3 from complaining
     var yAxis = d3.axisLeft().scale(yScale);
 
-    /*
-    var listOfObjects = [];
-	var a = ["car", "bike", "scooter"];
-	a.forEach(function(entry) {
-	    var singleObj = {};
-	    singleObj['type'] = 'vehicle';
-	    singleObj['value'] = entry;
-	    listOfObjects.push(singleObj);
-	});
-	*/
-
-	// This is going to be the object which will act as list of objects that looks like parameters.
-	var function_list = [];
-
-    //Create SVGs and <g> elements as containers for charts
+    //Create chart1G where the the attribute boxes will go
     chart1G = d3.select("#chart1")
         .append('p')
         .append('button')
-            .style("border", "1px solid black")
+        .style("border", "1px solid black")
         .text('Add Attribute')
         .on('click', function() {
-
             if(numAtts < 5){
                 numAtts++;
                 addAttributes();
             }
         });
 
-    var numAtts = 1;
-    addAttributes();
+    var numAtts= 0;
+    function_list.push(parameters[0]); //make duration the first attribute of the page
+    addAttributes(); //initial call of add attributes to make duration the initial attribute with a weight of 1
 
-    function addAttributes(){
-        chart1G.selectAll("select").remove()
+    function addAttributes() {
+        chart1G.selectAll("select").remove();
 
-        var data = ["Duration", "IMDB Score", "Year","Gross Revenue","Budget"];
+        var data = ["duration", "imdb_score", "title_year","gross","budget"];
 
-            d3.select('#chart1')
+        numAtts++;
+
+        d3.select('#chart1')
             .append('input')
             .attr('type','text')
             .attr('name','weight'+numAtts)
             .attr('class','input'+numAtts)
-            .attr('id',function(d,i){return 'weight-' + i;})
+            .attr('id',function(d,i){return 'weight' + numAtts;})
             .attr('value','1')
             .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
                 console.log(selectValue)
-                selectValue2 = d3.select('#select-' + i).property('value')
-                console.log(selectValue2)
-                
-                
+                selectValue2 = d3.select('#select' + i).property('value')
+                console.log(selectValue2) 
             });
 
-            var select = d3.select('#chart1')
-            .append('select')
-            .attr('class','select' + numAtts)
-            .on('change',function(){
-                selectValue = d3.select(this).property('value');
-                console.log(selectValue);
-                //change dropdown
-            	if (selectValue === parameters[0].id) {
-            		function_list.push(parameters[0]);
-            	} else if (selectValue === parameters[1].id) {
-            		function_list.push(parameters[1]);
-            	} else if (selectValue === parameters[2].id) {
-            		function_list.push(parameters[2]);
-            	} else if (selectValue === parameters[3].id) {
-            		function_list.push(parameters[3]);
-            	} else {
-            		function_list.push(parameters[4]);
-            	}
-	            console.log(function_list);
-            });
+        var select = d3.select('#chart1')
+			            .append('select')
+			            .attr('class','select' + numAtts)
+			            .attr('id',function(d,i){return 'select' + numAtts;})
+			            .on('change',function(d,i) {
+			                // selectValue = d3.select(this).property('value');
+			                // console.log(selectValue);
+			             	// change dropdown
+			                updateScale();
+			                updateAxis();
+			                updateDots();
+			            });
 
-            var options = select
-            .selectAll('option')
-            .data(data).enter()
-            .append('option')
-                .text(function (d) { return d; });
-
-
-
-        for(var i = 0;i < numAtts;i++){
-            console.log("set listener");
-           function onchange() {
-            selectValue = d3.select('select'+numAtts).property('value')
-            console.log(selectValue+"value")
-            };
-
-        }
-
+        var options = select.selectAll('option')
+			            .data(data).enter()
+			            .append('option')
+			            .text(function (d) { return d; });
     }
 
+    //Create chart2G which is going to hold the scatterplot
     var chart2G = d3.select("#chart2")
 	                .append("svg:svg")
 	                .attr("width",width)
 	                .attr("height",height)
                     .append('g');
 
-	//add scatterplot points
-    /* var temp1= chart1G.selectAll(".dot")
-	    .data(csv)
-	    .enter()
-	    .append("circle")
-	    .classed('dot1', true) // Always remember to add the class you select the elements with
-	    .attr("id",function(d,i) {return i;} )
-	    .attr("stroke", "black")
-	    .attr("cx", function(d) { return xScale(d['SATM']); })
-	    .attr("cy", function(d) { return yScale(d['SATV']); })
-	    .attr("r", 5)
-	    .on("click", function(d,i)
-	    {
-	    	brush2.move(brushContainerG2, null);
-	    	d3.selectAll('.dot1')
-		   		.classed('dot--slected1', false);
-		   	d3.select(this)
-		   		.classed('dot--selected1', true);
-	   		d3.selectAll('.dot2')
-		   		.classed('dot--selected2', function(e) {
-		      		return e==d;
-	    		});
-	   		d3.select('#satm').text(d.SATM);
-	   		d3.select('#satv').text(d.SATV);
-	   		d3.select('#act').text(d.ACT);
-	   		d3.select('#gpa').text(d.GPA);
-        }); */
-
-    var formatComma = d3.format(","),
+//These are formatting functions for displaying info in chart3, but it's actually updated in the "on click" function
+    var formatComma = d3.format(","), 
     	formatDecimal = d3.format(".1f");
-        
-    createAxis(xScale);
 
-    function createAxis(xScale){
-        var temp2 = chart2G.selectAll(".dot")
+    //populate the graph based on this function
+    var temp2 = chart2G.selectAll(".dot")
                     .data(csv)
                     .enter()
                     .append("circle")
                     .classed('dot2', true) // Always remember to add the class you select the elements with
                     .attr("id",function(d,i) {return i;} )
                     .attr("stroke", "black")
-                    .attr("cx", function(d) { return xScale((d['duration']-duration_min)/(duration_max-duration_min)); })
+                    .attr("cx", function(d) {
+                    	var score = 0;
+                    	for (var i = 0; i < function_list.length; i++) {
+                    		score += (d[function_list[i].id]-function_list[i].min)/(function_list[i].max-function_list[i].min)
+                    	}
+                    	return xScale(score); })
                     .attr("cy", height - 30.0-100)
                     .attr("r", 5)
                     .on("click", function(d,i)
                     {
-                         d3.selectAll('.dot2')
+                        d3.selectAll('.dot2')
                             .classed('dot--selected', false);
                         d3.select(this)
                             .classed('dot--selected', true);
-                        /* d3.selectAll('.dot1')
-                            .classed('dot--selected1', function(e) {
-                                return e==d;
-                            }); */
+
                         d3.select('#movie').text(d.movie_title);
                         d3.select('#director').text(d.director_name);
-                        d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
+                        d3.select('#gross').text(function() { return '$ ' + formatComma(d.gross); });
+                        d3.select('#budget').text(function() { return '$ ' + formatComma(d.budget); });
                         d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
                         d3.select('#genre').text(d.genres);
                         d3.select('#duration').text(d.duration + " min");
                         d3.select('#year').text(d.title_year);
                     });
-    }
-  	/* chart1G // or something else that selects the SVG element in your visualizations
-		.append("g") // create a group node
-		.attr("transform", "translate(0,"+ (width -30)+ ")")
-		.call(xAxis) // call the axis generator
-		.append("text")
-		.attr("class", "label")
-		.attr("x", width-16)
-		.attr("y", -6)
-		.style("text-anchor", "end")
-		.text("SATM")
-		.style("fill", "black");
 
- 	/* chart1G // or something else that selects the SVG element in your visualizations
-		.append("g") // create a group node
-		.attr("transform", "translate(50, 0)")
-		.call(yAxis)
-		.append("text")
-		.attr("class", "label")
-		.attr("transform", "rotate(-90)")
-		.attr("y", 6)
-		.attr("dy", ".71em")
-		.style("text-anchor", "end")
-		.text("SATV")
-		.style("fill", "black"); */
-    drawAxis();
-        
-    function drawAxis(){
-        chart2G.append("g") // create a group node
-		.attr("transform", "translate(0,"+ (450)+ ")")
-		.call(xAxis)
-		.append("text")
-		.attr("class", "label")
-		.attr("x", width-200)
-		.attr("y", -6)
-		.style("text-anchor", "end")
-		.text("High Favorability")
-		.style("fill", "black");
+    //These are formatting functions for displaying info in chart3
+    var formatComma = d3.format(","), 
+    	formatDecimal = d3.format(".1f");
+
+    // Draw the axis and labels the first time
+
+
+    chart2G.append("g") // create a group node
+			.attr("transform", "translate(0,"+ (450)+ ")")
+			.attr("class", "x axis")
+			.call(xAxis)
+			.append("text")
+			.attr("class", "label")
+			.attr("x", width-200)
+			.attr("y", -6)
+			.style("text-anchor", "end")
+			.text("High Favorability")
+			.style("fill", "black");
 
     chart2G.append("g") // create a group node
 		.attr("transform", "translate(0,"+ (450)+ ")")
-		.call(xAxis)
+		//.call(xAxis)
 		.append("text")
 		.attr("class", "label")
 		.attr("x", 150)
@@ -291,22 +217,115 @@ d3.csv("movies.csv", function(csv) {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("text-decoration", "underline")
-        .text("Movie Favorability Graph");
+        .text("Movie Favorability Graph");    
+
         
+
+
+    function updateScale() {
+    	function_list = []; //clear the function_list because we're about to read it from the webpage html
+
+    	for (var i = 1; i <= numAtts; i++) {
+    		var selectValue = d3.select('#select' + i).property('value');
+    		//console.log(selectValue);
+    		if (selectValue === parameters[0].id) {
+        		function_list.push(parameters[0]);
+        	} else if (selectValue === parameters[1].id) {
+        		function_list.push(parameters[1]);
+        	} else if (selectValue === parameters[2].id) {
+        		function_list.push(parameters[2]);
+        	} else if (selectValue === parameters[3].id) {
+        		function_list.push(parameters[3]);
+        	} else if (selectValue === parameters[4].id) {
+        		function_list.push(parameters[4]);
+        	}
+    	}
+    	console.log("Updated function_list in updateScale():");
+    	console.log(function_list);
+
+    	xScale = d3.scaleLinear().domain([0, numAtts]).range([50, 800]);//numAtts should reflect the number of attributeson the page
+    	xAxis = d3.axisBottom().scale(xScale);
     }
 
-    
+    // Update X Axis
+    // svg.select(".x.axis")
+    //     .transition()
+    //     .duration(1000)
+    //     .call(xAxis);
 
-     /* chart2G // or something else that selects the SVG element in your visualizations
-		.append("g") // create a group node
-		.attr("transform", "translate(50, 0)")
-		.call(yAxis)
-		.append("text")
-		.attr("class", "label")
-		.attr("transform", "rotate(-90)")
-		.attr("y", 6)
-		.attr("dy", ".71em")
-		.style("text-anchor", "end")
-		.text("GPA")
-		.style("fill", "black"); */
-	});
+    // // Update Y Axis
+    // svg.select(".y.axis")
+    //     .transition()
+    //     .duration(100)
+    //     .call(yAxis);
+    function updateAxis() {
+    	chart2G.select(".x.axis")
+	        .transition()
+	        .duration(1000)
+	        .call(xAxis);
+    }
+
+    function updateDots() {
+        temp2.attr("cx", function(d) {
+            	var score = 0;
+            	for (var i = 0; i < function_list.length; i++) {
+            		score += (d[function_list[i].id]-function_list[i].min)/(function_list[i].max-function_list[i].min)
+            	}
+        		return xScale(score); 
+        	})
+        	// .attr("cy", height - 30.0-100)
+        //             .attr("r", 5)
+        //             .on("click", function(d,i)
+        //             {
+        //                  d3.selectAll('.dot2')
+        //                     .classed('dot--selected', false);
+        //                 d3.select(this)
+        //                     .classed('dot--selected', true);
+        //                 /* d3.selectAll('.dot1')
+        //                     .classed('dot--selected1', function(e) {
+        //                         return e==d;
+        //                     }); */
+        //                 d3.select('#movie').text(d.movie_title);
+        //                 d3.select('#director').text(d.director_name);
+        //                 d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
+        //                 d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
+        //                 d3.select('#genre').text(d.genres);
+        //                 d3.select('#duration').text(d.duration + " min");
+        //                 d3.select('#year').text(d.title_year);
+        //             });
+    }
+   
+        
+   //  function drawAxis() {
+   //      chart2G.append("g") // create a group node
+			// .attr("transform", "translate(0,"+ (450)+ ")")
+			// .call(xAxis)
+			// .append("text")
+			// .attr("class", "label")
+			// .attr("x", width-200)
+			// .attr("y", -6)
+			// .style("text-anchor", "end")
+			// .text("High Favorability")
+			// .style("fill", "black");
+
+	  //   chart2G.append("g") // create a group node
+			// .attr("transform", "translate(0,"+ (450)+ ")")
+			// //.call(xAxis)
+			// .append("text")
+			// .attr("class", "label")
+			// .attr("x", 150)
+			// .attr("y", -6)
+			// .style("text-anchor", "end")
+			// .text("Low Favorability")
+			// .style("fill", "black");
+
+	  //   chart2G.append("text")
+	  //       .attr("x", (400))
+	  //       .attr("y", (100))
+	  //       .attr("text-anchor", "middle")
+	  //       .style("font-size", "16px")
+	  //       .style("text-decoration", "underline")
+	  //       .text("Movie Favorability Graph");    
+   //  }
+
+});
