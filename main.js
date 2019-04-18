@@ -247,17 +247,6 @@ d3.csv("movies.csv", function(csv) {
     	xAxis = d3.axisBottom().scale(xScale);
     }
 
-    // Update X Axis
-    // svg.select(".x.axis")
-    //     .transition()
-    //     .duration(1000)
-    //     .call(xAxis);
-
-    // // Update Y Axis
-    // svg.select(".y.axis")
-    //     .transition()
-    //     .duration(100)
-    //     .call(yAxis);
     function updateAxis() {
     	chart2G.select(".x.axis")
 	        .transition()
@@ -273,59 +262,6 @@ d3.csv("movies.csv", function(csv) {
             	}
         		return xScale(score); 
         	})
-        	// .attr("cy", height - 30.0-100)
-        //             .attr("r", 5)
-        //             .on("click", function(d,i)
-        //             {
-        //                  d3.selectAll('.dot2')
-        //                     .classed('dot--selected', false);
-        //                 d3.select(this)
-        //                     .classed('dot--selected', true);
-        //                 /* d3.selectAll('.dot1')
-        //                     .classed('dot--selected1', function(e) {
-        //                         return e==d;
-        //                     }); */
-        //                 d3.select('#movie').text(d.movie_title);
-        //                 d3.select('#director').text(d.director_name);
-        //                 d3.select('#gross_revenue').text(function() { return '$ ' + formatComma(d.gross); });
-        //                 d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
-        //                 d3.select('#genre').text(d.genres);
-        //                 d3.select('#duration').text(d.duration + " min");
-        //                 d3.select('#year').text(d.title_year);
-        //             });
     }
-   
-        
-   //  function drawAxis() {
-   //      chart2G.append("g") // create a group node
-			// .attr("transform", "translate(0,"+ (450)+ ")")
-			// .call(xAxis)
-			// .append("text")
-			// .attr("class", "label")
-			// .attr("x", width-200)
-			// .attr("y", -6)
-			// .style("text-anchor", "end")
-			// .text("High Favorability")
-			// .style("fill", "black");
-
-	  //   chart2G.append("g") // create a group node
-			// .attr("transform", "translate(0,"+ (450)+ ")")
-			// //.call(xAxis)
-			// .append("text")
-			// .attr("class", "label")
-			// .attr("x", 150)
-			// .attr("y", -6)
-			// .style("text-anchor", "end")
-			// .text("Low Favorability")
-			// .style("fill", "black");
-
-	  //   chart2G.append("text")
-	  //       .attr("x", (400))
-	  //       .attr("y", (100))
-	  //       .attr("text-anchor", "middle")
-	  //       .style("font-size", "16px")
-	  //       .style("text-decoration", "underline")
-	  //       .text("Movie Favorability Graph");    
-   //  }
 
 });
