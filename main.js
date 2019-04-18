@@ -93,7 +93,7 @@ d3.csv("movies.csv", function(csv) {
             }
         });
 
-    var numAtts= 0;
+    var numAtts=1;
     function_list.push(parameters[0]); //make duration the first attribute of the page
     addAttributes(); //initial call of add attributes to make duration the initial attribute with a weight of 1
 
@@ -102,26 +102,26 @@ d3.csv("movies.csv", function(csv) {
 
         var data = ["duration", "imdb_score", "title_year","gross","budget"];
 
-        numAtts++;
+        //numAtts++;
 
         d3.select('#chart1')
             .append('input')
             .attr('type','text')
             .attr('name','weight'+numAtts)
             .attr('class','input'+numAtts)
-            .attr('id',function(d,i){return 'weight' + numAtts;})
+            .attr('id',function(d,i){return 'weight'+numAtts;})
             .attr('value','1')
             .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
                 console.log(selectValue)
-                selectValue2 = d3.select('#select' + i).property('value')
+                selectValue2 = d3.select('#select'+i).property('value')
                 console.log(selectValue2) 
             });
 
         var select = d3.select('#chart1')
 			            .append('select')
-			            .attr('class','select' + numAtts)
-			            .attr('id',function(d,i){return 'select' + numAtts;})
+			            .attr('class','select'+numAtts)
+			            .attr('id',function(d,i){return 'select'+numAtts;})
 			            .on('change',function(d,i) {
 			                // selectValue = d3.select(this).property('value');
 			                // console.log(selectValue);
@@ -173,11 +173,11 @@ d3.csv("movies.csv", function(csv) {
 
                         d3.select('#movie').text(d.movie_title);
                         d3.select('#director').text(d.director_name);
-                        d3.select('#gross').text(function() { return '$ ' + formatComma(d.gross); });
-                        d3.select('#budget').text(function() { return '$ ' + formatComma(d.budget); });
+                        d3.select('#gross').text(function() { return '$ '+formatComma(d.gross); });
+                        d3.select('#budget').text(function() { return '$ '+formatComma(d.budget); });
                         d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
                         d3.select('#genre').text(d.genres);
-                        d3.select('#duration').text(d.duration + " min");
+                        d3.select('#duration').text(d.duration+" min");
                         d3.select('#year').text(d.title_year);
                     });
 
