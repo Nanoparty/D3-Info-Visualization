@@ -11,6 +11,17 @@
   display: flex;
 }
 
+.yHandle{
+    display: flex;
+}
+.yAttributes{
+    width: 200px;
+}
+.scatterplot{
+    flex-grow: 1;
+}
+
+
 .label {
   fill: black;
   font-size: 12px;
