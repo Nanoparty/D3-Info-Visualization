@@ -119,7 +119,7 @@ d3.csv("movies.csv", function(csv) {
 
         //xnumAtts++;
 
-        d3.select('#chart1')
+         d3.select('#chart1')
             .append('input')
             .attr('type','text')
             .attr('name','xweight'+xnumAtts)
@@ -131,7 +131,8 @@ d3.csv("movies.csv", function(csv) {
                 console.log(selectValue)
                 selectValue2 = d3.select('#xselect'+i).property('value')
                 console.log(selectValue2) 
-            });
+            }); 
+            
 
         var select = d3.select('#chart1')
 			            .append('select')
@@ -198,6 +199,34 @@ d3.csv("movies.csv", function(csv) {
 	                .attr("width",width)
 	                .attr("height",height)
                     .append('g');
+                    
+    var chart5G = d3.select("#chart5")
+	                .append("svg:svg")
+	                .attr("width",20)
+	                .attr("height",20)
+                    .append('g');
+                    
+   
+                    
+                    
+    var data2 = ["Crime", "Drama", "Thriller","Biography","History", "Comedy","Romance","Family", "War","Action","Adventure","Sci-Fi","Fantasy","Horror","Music","Western","Musical","Mystery","Animation"];                
+    var select = d3.select('#chart5')
+			            .append('select')
+			            .attr('class','yselect'+ynumAtts)
+			            .attr('id',function(d,i){return 'yselect'+ynumAtts;})
+			            .on('change',function(d,i) {
+			                 selectValue = d3.select(this).property('value');
+			                 console.log(selectValue);
+			             	// change dropdown
+                            d3.selectAll(".dot2").classed('dot--selected', false);
+			                d3.selectAll(".dot2").filter(function(d) { return d.genres.includes(selectValue); }).classed('dot--selected', true);
+                            console.log(point);
+			            });
+
+        var options2 = select.selectAll('option')
+			            .data(data2).enter()
+			            .append('option')
+			            .text(function (d) { return d; });
 
 	//These are formatting functions for displaying info in chart4, but it's actually updated in the "on click" function
     var formatComma = d3.format(","), 
@@ -209,7 +238,7 @@ d3.csv("movies.csv", function(csv) {
                     .enter()
                     .append("circle")
                     .classed('dot2', true) // Always remember to add the class you select the elements with
-                    .attr("id",function(d,i) {return i;} )
+                    .attr("id",function(d,i) {return 'dot2-' + i;;} )
                     .attr("stroke", "black")
                     .attr("cx", function(d) {
                     	var score = 0;
