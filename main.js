@@ -220,7 +220,7 @@ d3.csv("movies.csv", function(csv) {
 			return string.slice(0, string.length-3);
 		});
 
-                    
+
     var chart5G = d3.select("#chart3")
         .append("div")
         .attr('id', "genreChoice")
@@ -364,7 +364,7 @@ d3.csv("movies.csv", function(csv) {
 		.style("fill", "black");
 
     chart3G.append("text")
-        .attr("x", (400))
+        .attr("x", (275))
         .attr("y", (25))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
