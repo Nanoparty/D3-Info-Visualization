@@ -121,16 +121,23 @@ d3.csv("movies.csv", function(csv) {
 
          d3.select('#chart1')
             .append('input')
-            .attr('type','text')
+            .attr('type','range')
             .attr('name','xweight'+xnumAtts)
             .attr('class','xinput'+xnumAtts)
+            .attr("min", 0)
+			.attr("max", 1)
+            .attr("step", ".1")
             .attr('id',function(d,i){return 'xweight'+xnumAtts;})
             .attr('value','1')
             .on('change',function(d,i){
-                selectValue = d3.select(this).property('value')
-                console.log(selectValue)
-                selectValue2 = d3.select('#xselect'+i).property('value')
-                console.log(selectValue2) 
+                //selectValue = d3.select(this).property('value')
+                //console.log(selectValue)
+                //selectValue2 = d3.select('#xselect'+i).property('value')
+                //console.log(selectValue2) 
+                
+                var val = document.getElementById("xweight" + xnumAtts).value;
+                
+                console.log(val);
             }); 
             
 
@@ -162,16 +169,22 @@ d3.csv("movies.csv", function(csv) {
 
         d3.select('#chart2')
             .append('input')
-            .attr('type','text')
+            .attr('type','range')
+            .attr("min", 0)
+			.attr("max", 1)
+            .attr("step", ".1")
             .attr('name','yweight'+ynumAtts)
             .attr('class','yinput'+ynumAtts)
             .attr('id',function(d,i){return 'yweight'+ynumAtts;})
             .attr('value','1')
             .on('change',function(d,i){
-                selectValue = d3.select(this).property('value')
-                console.log(selectValue)
-                selectValue2 = d3.select('#yselect'+i).property('value')
-                console.log(selectValue2) 
+                //selectValue = d3.select(this).property('value')
+                //console.log(selectValue)
+                //selectValue2 = d3.select('#yselect'+i).property('value')
+                //console.log(selectValue2) 
+                var val = document.getElementById("yweight" + ynumAtts).value;
+                
+                console.log(val);
             });
 
         var select = d3.select('#chart2')
@@ -207,7 +220,7 @@ d3.csv("movies.csv", function(csv) {
                     .append('g');
                     
    
-                    
+                   
                     
     var data2 = ["Crime", "Drama", "Thriller","Biography","History", "Comedy","Romance","Family", "War","Action","Adventure","Sci-Fi","Fantasy","Horror","Music","Western","Musical","Mystery","Animation"];                
     var select = d3.select('#chart5')
@@ -220,13 +233,15 @@ d3.csv("movies.csv", function(csv) {
 			             	// change dropdown
                             d3.selectAll(".dot2").classed('dot--selected', false);
 			                d3.selectAll(".dot2").filter(function(d) { return d.genres.includes(selectValue); }).classed('dot--selected', true);
-                            console.log(point);
+                            
 			            });
 
         var options2 = select.selectAll('option')
 			            .data(data2).enter()
 			            .append('option')
 			            .text(function (d) { return d; });
+                        
+            
 
 	//These are formatting functions for displaying info in chart4, but it's actually updated in the "on click" function
     var formatComma = d3.format(","), 
