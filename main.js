@@ -266,7 +266,7 @@ d3.csv("movies.csv", function(csv) {
     .attr('id', "year")
     .text("Release Year:");
                                 
-    var data2 = ["Action", "Adventure", "Animation", "Biography", "Crime", "Comedy", "Documentary", "Drama", "Family", "Fantasy", "History", 
+    var data2 = ["None","Action", "Adventure", "Animation", "Biography", "Crime", "Comedy", "Documentary", "Drama", "Family", "Fantasy", "History", 
     			"Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War",  "Western"];
 
     var select = d3.select('#genreChoice')
