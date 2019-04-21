@@ -122,9 +122,12 @@ d3.csv("movies.csv", function(csv) {
 
         d3.select('#chart1')
             .append('input')
-            .attr('type','text')
+            .attr('type','range')
             .attr('name','xweight'+xnumAtts)
             .attr('class','xinput'+xnumAtts)
+            .attr("min", 0)
+			.attr("max", 1)
+            .attr("step", ".1")
             .attr('id',function(d,i){return 'xweight'+xnumAtts;})
             .attr('value','1')
             .on('change',function(d,i){
@@ -163,7 +166,10 @@ d3.csv("movies.csv", function(csv) {
 
        	d3.select('#chart2')
             .append('input')
-            .attr('type','text')
+            .attr('type','range')
+            .attr("min", 0)
+			.attr("max", 1)
+            .attr("step", ".1")
             .attr('name','yweight'+ynumAtts)
             .attr('class','yinput'+ynumAtts)
             .attr('id',function(d,i){return 'yweight'+ynumAtts;})
@@ -209,7 +215,7 @@ d3.csv("movies.csv", function(csv) {
                     .append('g');
                     
    
-                    
+                   
                     
     var data2 = ["Action", "Adventure", "Animation", "Biography", "Crime", "Comedy", "Documentary", "Drama", "Family", "Fantasy", "History", 
     			"Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War",  "Western", ];                
@@ -223,13 +229,15 @@ d3.csv("movies.csv", function(csv) {
 			             	// change dropdown
                             d3.selectAll(".dot2").classed('dot--selected', false);
 			                d3.selectAll(".dot2").filter(function(d) { return d.genres.includes(selectValue); }).classed('dot--selected', true);
-                            console.log(point);
+                            
 			            });
 
         var options2 = select.selectAll('option')
 			            .data(data2).enter()
 			            .append('option')
 			            .text(function (d) { return d; });
+                        
+            
 
 	//These are formatting functions for displaying info in chart4, but it's actually updated in the "on click" function
     var formatComma = d3.format(","), 
