@@ -7,25 +7,18 @@
   stroke: rgba(0, 0, 0, 0.3);
 }
 
-#main {
-  display: flex;
-}
-
-.yHandle{
-    display: flex;
-}
-.yAttributes{
-    width: 200px;
-}
-.scatterplot{
-    flex-grow: 1;
-}
-
-
 .label {
   fill: black;
   font-size: 12px;
 }
+
+/*#body {
+  background: linear-gradient(45deg, #22AA78 0%, #06B9BA 100%);
+}
+
+#chart3 {
+background-image: linear-gradient(to right top, #05080c, #001430, #001a52, #001a73, #0f098d);
+*/}
 
 .dot--hovered,
 .dot--selected.dot--hovered {
@@ -47,36 +40,3 @@
   fill: rgba(255, 0, 0, 0.3);
 }
 
-
-.title {
-  cursor: pointer;
-  font-size: 12px;
-  padding: 5px;
-  margin: 1px 0;
-  border-radius: 10px;
-}
-
-.title--hovered,
-.title--selected.title--hovered {
-  background-color: rgba(255, 255, 0, 0.5);
-  /* font-size: 24px; */
-  font-weight: bold;
-}
-
-.title--selected {
-  background-color: rgba(255, 0, 0, 0.2);
-  /* font-size: 24px; */
-  font-weight: bold;
-}
-
-
-.info {
-  font-size: 9px;
-  font-weight: normal;
-  display: none;
-}
-
-.title--hovered > .info,
-.title--selected > .info {
-  display: inherit;
-}

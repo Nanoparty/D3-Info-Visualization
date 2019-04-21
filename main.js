@@ -73,6 +73,7 @@ d3.csv("movies.csv", function(csv) {
                 updateXScale();
                 updateXAxis();
                 updateDots();
+                updateXFunction();
             }
         });
 
@@ -88,6 +89,7 @@ d3.csv("movies.csv", function(csv) {
                 updateYScale();
                 updateYAxis();
                 updateDots();
+                updateYFunction();
             }
         });
 
@@ -186,9 +188,13 @@ d3.csv("movies.csv", function(csv) {
 
     //Create chart3G which is going to hold the scatterplot
     var chart3G = d3.select("#chart3")
+    	.attr("width",width)
+    	.attr("height",height)
         .append("svg:svg")
-        .attr("width",width)
+        .attr('id', 'plot')
+        .attr("width",550)
         .attr("height",height)
+        .attr("style", "float:left")
         .append('g');
 
     // Display the Functions the first time
@@ -215,16 +221,55 @@ d3.csv("movies.csv", function(csv) {
 		});
 
                     
-    var chart5G = d3.select("#chart5")
-        .append("svg:svg")
-        .attr("width",20)
-        .attr("height",20)
-        .append('g');
+    var chart5G = d3.select("#chart3")
+        .append("div")
+        .attr('id', "genreChoice")
+        .text("Highlight Genre:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "movie")
+    .text("Movie Title:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "director")
+    .text("Director:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "budget")
+    .text("Budget:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "gross")
+    .text("Gross:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "imdb_score")
+    .text("IMDb Score:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "genre")
+    .text("Genre:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "duration")
+    .text("Duration:");
+
+    d3.select("#chart3")
+    .append('div')
+    .attr('id', "year")
+    .text("Release Year:");
                                 
     var data2 = ["Action", "Adventure", "Animation", "Biography", "Crime", "Comedy", "Documentary", "Drama", "Family", "Fantasy", "History", 
     			"Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War",  "Western"];
 
-    var select = d3.select('#chart5')
+    var select = d3.select('#genreChoice')
 			            .append('select')
 			            .attr('class','yselect'+ynumAtts)
 			            .attr('id',function(d,i){return 'yselect'+ynumAtts;})
@@ -278,14 +323,14 @@ d3.csv("movies.csv", function(csv) {
                         d3.select(this)
                             .classed('dot--selected', true);
 
-                        d3.select('#movie').text(d.movie_title);
-                        d3.select('#director').text(d.director_name);
-                        d3.select('#gross').text(function() { return '$ '+formatComma(d.gross); });
-                        d3.select('#budget').text(function() { return '$ '+formatComma(d.budget); });
-                        d3.select('#imdb_score').text(function() { return formatComma(d.imdb_score); });
-                        d3.select('#genre').text(d.genres);
-                        d3.select('#duration').text(d.duration+" min");
-                        d3.select('#year').text(d.title_year);
+                        d3.select('#movie').text("Movie Title: "+d.movie_title);
+                        d3.select('#director').text("Director: "+d.director_name);
+                        d3.select('#gross').text(function() { return 'Gorss: $ '+formatComma(d.gross); });
+                        d3.select('#budget').text(function() { return 'Budget: $ '+formatComma(d.budget); });
+                        d3.select('#imdb_score').text(function() { return "Imdb Score: "+ formatComma(d.imdb_score); });
+                        d3.select('#genre').text("Genre: "+d.genres);
+                        d3.select('#duration').text("Duration: "+d.duration+" min");
+                        d3.select('#year').text("Release Year: "+d.title_year);
                     });
 
     // Draw the axis and labels the first time
