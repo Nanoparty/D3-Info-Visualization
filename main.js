@@ -90,6 +90,9 @@ d3.csv("movies.csv", function(csv) {
             if(xnumAtts < 5){
                 xnumAtts++;
                 addXAttributes();
+                updateXScale();
+                updateXAxis();
+                updateDots();
             }
         });
 
@@ -117,9 +120,7 @@ d3.csv("movies.csv", function(csv) {
 
         var data = ["duration", "imdb_score", "title_year","gross","budget"];
 
-        //xnumAtts++;
-
-         d3.select('#chart1')
+        d3.select('#chart1')
             .append('input')
             .attr('type','text')
             .attr('name','xweight'+xnumAtts)
@@ -127,10 +128,12 @@ d3.csv("movies.csv", function(csv) {
             .attr('id',function(d,i){return 'xweight'+xnumAtts;})
             .attr('value','1')
             .on('change',function(d,i){
-                selectValue = d3.select(this).property('value')
-                console.log(selectValue)
-                selectValue2 = d3.select('#xselect'+i).property('value')
-                console.log(selectValue2) 
+                selectValue = d3.select(this).property('value');
+                xfunction_list[this.id[7]-1].weight = +selectValue;
+                updateXScale();
+                updateXAxis();
+                updateDots();
+
             }); 
             
 
@@ -158,9 +161,7 @@ d3.csv("movies.csv", function(csv) {
 
         var data = ["duration", "imdb_score", "title_year","gross","budget"];
 
-        //xnumAtts++;
-
-        d3.select('#chart2')
+       	d3.select('#chart2')
             .append('input')
             .attr('type','text')
             .attr('name','yweight'+ynumAtts)
@@ -169,9 +170,10 @@ d3.csv("movies.csv", function(csv) {
             .attr('value','1')
             .on('change',function(d,i){
                 selectValue = d3.select(this).property('value')
-                console.log(selectValue)
-                selectValue2 = d3.select('#yselect'+i).property('value')
-                console.log(selectValue2) 
+                yfunction_list[this.id[7]-1].weight = +selectValue;
+                updateYScale();
+                updateYAxis();
+                updateDots();
             });
 
         var select = d3.select('#chart2')
@@ -209,7 +211,8 @@ d3.csv("movies.csv", function(csv) {
    
                     
                     
-    var data2 = ["Crime", "Drama", "Thriller","Biography","History", "Comedy","Romance","Family", "War","Action","Adventure","Sci-Fi","Fantasy","Horror","Music","Western","Musical","Mystery","Animation"];                
+    var data2 = ["Action", "Adventure", "Animation", "Biography", "Crime", "Comedy", "Documentary", "Drama", "Family", "Fantasy", "History", 
+    			"Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War",  "Western", ];                
     var select = d3.select('#chart5')
 			            .append('select')
 			            .attr('class','yselect'+ynumAtts)
@@ -243,7 +246,7 @@ d3.csv("movies.csv", function(csv) {
                     .attr("cx", function(d) {
                     	var score = 0;
                     	for (var i = 0; i < xfunction_list.length; i++) {
-                    		score += (d[xfunction_list[i].id]-xfunction_list[i].min)/(xfunction_list[i].max-xfunction_list[i].min)
+                    		score += xfunction_list[i].weight*(d[xfunction_list[i].id]-xfunction_list[i].min)/(xfunction_list[i].max-xfunction_list[i].min)
                     	}
                     	return xScale(score); 
                     })
@@ -251,7 +254,7 @@ d3.csv("movies.csv", function(csv) {
                     .attr("cy",function(d) {
                     	var score = 0;
                     	for (var i = 0; i < yfunction_list.length; i++) {
-                    		score += (d[yfunction_list[i].id]-yfunction_list[i].min)/(yfunction_list[i].max-yfunction_list[i].min)
+                    		score += yfunction_list[i].weight*(d[yfunction_list[i].id]-yfunction_list[i].min)/(yfunction_list[i].max-yfunction_list[i].min)
                     	}
                     	return yScale(score); 
 			        })
@@ -342,7 +345,12 @@ d3.csv("movies.csv", function(csv) {
     	console.log("Updated xfunction_list in updateXScale():");
     	console.log(xfunction_list);
 
-    	xScale = d3.scaleLinear().domain([0, xnumAtts]).range([50, 500]);//xnumAtts should reflect the number of xattributes on the page
+    	var weightTotal=0;
+    	for (var i = 0; i<xfunction_list.length; i++) {
+    		weightTotal+=xfunction_list[i].weight;
+    	}
+
+    	xScale = d3.scaleLinear().domain([0, weightTotal]).range([50, 500]);//xnumAtts should reflect the number of xattributes on the page
     	xAxis = d3.axisBottom().scale(xScale);
     }
 
@@ -367,7 +375,13 @@ d3.csv("movies.csv", function(csv) {
     	console.log("Updated yfunction_list in updatYScale():");
     	console.log(yfunction_list);
 
-    	yScale = d3.scaleLinear().domain([0, ynumAtts]).range([500, 50]);//ynumAtts should reflect the number of yattributes on the page
+    	
+    	var weightTotal=0;
+    	for (var i = 0; i<yfunction_list.length; i++) {
+    		weightTotal+=yfunction_list[i].weight;
+    	}
+
+    	yScale = d3.scaleLinear().domain([0, weightTotal]).range([500, 50]);//ynumAtts should reflect the number of yattributes on the page
     	yAxis = d3.axisLeft().scale(yScale);
     }
 
@@ -389,14 +403,14 @@ d3.csv("movies.csv", function(csv) {
         temp3.attr("cx", function(d) {
             	var score = 0;
             	for (var i = 0; i < xfunction_list.length; i++) {
-            		score += (d[xfunction_list[i].id]-xfunction_list[i].min)/(xfunction_list[i].max-xfunction_list[i].min)
+            		score += xfunction_list[i].weight*(d[xfunction_list[i].id]-xfunction_list[i].min)/(xfunction_list[i].max-xfunction_list[i].min)
             	}
         		return xScale(score); 
         	})
         temp3.attr("cy", function(d) {
             	var score = 0;
             	for (var i = 0; i < yfunction_list.length; i++) {
-            		score += (d[yfunction_list[i].id]-yfunction_list[i].min)/(yfunction_list[i].max-yfunction_list[i].min)
+            		score += yfunction_list[i].weight*(d[yfunction_list[i].id]-yfunction_list[i].min)/(yfunction_list[i].max-yfunction_list[i].min)
             	}
         		return yScale(score); 
         	})
