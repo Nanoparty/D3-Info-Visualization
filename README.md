@@ -1,6 +1,9 @@
 # Information Visualization Project
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Georgia Tech class project
+
+[InfoViz Demo](https://nanoparty.github.io/Project5InfoViz/)
 
 ![image](https://user-images.githubusercontent.com/39596241/120133970-22a0fe80-c19b-11eb-9b19-4aba486a511a.png)
 
